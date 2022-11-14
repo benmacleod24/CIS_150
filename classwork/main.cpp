@@ -12,23 +12,18 @@
 // Namespaces
 using namespace std;
 
-string askForName() {
-    string name;
-
-    cout << "Hello" << endl;
-    cout << "Enter your name: ";
-    getline(cin, name);
-
-    return name;
-}
-
-void displayGreeting(string name) {
-    cout << "Greetings " << name << "!" << endl;
+int passingByValue(int x) {
+    cout << "x in Func1: " << x << endl;
+    x += 3;
+    cout << "x in Func2: " << x << endl;
+    return x;
 }
 
 // Entry Point
 int main()
 {
-    const string name = askForName();
-    displayGreeting(name);
+    int x = 10;
+    cout << "x before call: " << x << endl;
+    x = passingByValue(x);
+    cout << "x after call: " << x << endl;
 }
