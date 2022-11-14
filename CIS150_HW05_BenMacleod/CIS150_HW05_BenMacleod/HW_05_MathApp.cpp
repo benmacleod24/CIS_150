@@ -34,13 +34,15 @@ int requestMenuOption(bool fromError = false) {
     cout << "Please make a selection from the choices above: ";
     cin >> option;
 
-    if(option < 1 || option > 5) {
+    while(option < 1 || option > 5) {
+        system("clear");
         // Display menu again.
         displayMenu();
 
         // Tell the user to try again.
         cout << "Invalid Input, try again!" << endl;
-        requestMenuOption(true);
+        cout << "Please make a selection from the choices above: ";
+        cin >> option;
     }
 
     return option;
@@ -50,43 +52,29 @@ int requestMenuOption(bool fromError = false) {
  * @brief Display the results of the operation performed.
  * 
  * @tparam Type of numbers in the params.
- * @param type The type of operation performed.
+ * @param _operator The type of operation performed.
  * @param result The results of the function
  * @param valueOne Value one of the operation.
  * @param valueTwo Value two of the operation.
  */
 template <typename NumberType = double>
-void displayResultsToUser(int type, NumberType result, NumberType valueOne, NumberType valueTwo) {
-
-    // Determine logic based off operation type.
-    switch (type)
-    {
-    case 1:
-        cout << valueOne << " + " << valueTwo << " = " << result;
-        break;
-    case 2:
-        cout << valueOne << " - " << valueTwo << " = " << result;
-        break;
-    case 3:
-        cout << valueOne << " * " << valueTwo << " = " << result;
-        break;
-    case 4:
-        if (result == -9999) {
-            cout << "[Error] You can not divide by zero.";
-        } else {
-            cout << valueOne << " / " << valueTwo << " = " << result; 
-        }
-    
-        break;
-    case 5:
-        cout << "|" << valueOne << "|" << " = " << result;
-        break;     
-    default:
-        break;
-    }
-
-    cout << endl;
+void displayResultsToUser(string _operator, NumberType result, NumberType valueOne, NumberType valueTwo) {
+    cout << valueOne << " " << _operator << " " << valueTwo << " = " << result << endl;
 }
+
+/**
+ * @brief Display results to the user with only one operation value.
+ * 
+ * @tparam NumberType Type of the results and operation values.
+ * @param result Results of the operation performed.
+ * @param valueOne The only value for the operation.
+ */
+template <typename NumberType = double>
+void displayResultsToUser(string _operator, NumberType result, NumberType valueOne) {
+    cout << _operator << valueOne << _operator << " = " << result << endl;
+}
+
+
 
 /**
  * @brief Ask the user if they want to run the application again.
@@ -193,6 +181,7 @@ NumberType absoulte(NumberType value) {
 int main() {
     // Collect menu selection from the user, with error checking.
     const int menuSelection = requestMenuOption();
+    string _operator = "";
 
     // Operation Varibles.
     double results;
@@ -219,26 +208,28 @@ int main() {
     {
         case 1: 
             results = addition(valueOne, valueTwo);
+            displayResultsToUser("+", results, valueOne, valueTwo);
             break;
         case 2: 
             results = subtraction(valueOne, valueTwo);
+            displayResultsToUser("-", results, valueOne, valueTwo);
             break;
         case 3:
             results = multiply(valueOne, valueTwo);
+            displayResultsToUser("*", results, valueOne, valueTwo);
             break;
         case 4:
             results = divide(valueOne, valueTwo);
+            displayResultsToUser("/", results, valueOne, valueTwo);
             break;
         case 5:
             results = absoulte(valueOne);
+            displayResultsToUser("|", results, valueOne);
             break;
         default:
-            cout << "This action doesn't exist" << endl;
+            cout << "This action doesn't exist" << menuSelection << endl;
             break;
     }
-
-    // Display the results to the user.
-    displayResultsToUser(menuSelection, results, valueOne, valueTwo);
 
     // Ask and perform run again logic.
     bool shouldRunAgain = askToRunAgain();
